@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Foodie – Login & Signup</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    /* ---------- Base styles ---------- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at top left, #ff9a3c, #ff3c68 40%, #1f1b2e 80%);
+      color: #222;
+    }
+
+    .auth-wrapper {
+      width: 100%;
+      max-width: 980px;
+      background: #ffffff;
+      border-radius: 24px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    }
+
+    /* ---------- Left: forms ---------- */
+    .auth-forms {
+      padding: 40px 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 26px;
+    }
+
+    .brand {
+      font-weight: 800;
+      font-size: 24px;
+      color: #ff3c68;
+      letter-spacing: 0.04em;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 12px;
+      margin-top: 10px;
+      margin-bottom: 8px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      border-radius: 999px;
+      padding: 10px 0;
+      border: 0;
+      cursor: pointer;
+      background: #f3f4f6;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #ff9a3c, #ff3c68);
+      color: #fff;
+      box-shadow: 0 10px 20px rgba(255, 60, 104, 0.4);
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .form {
+      display: none;
+      margin-top: 8px;
+    }
+
+    .form.active {
+      display: block;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+    }
+
+    .field label {
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .field input,
+    .field select {
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      padding: 10px 14px;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.15s ease;
+      background: #f9fafb;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: #ff3c68;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(255, 60, 104, 0.15);
+    }
+
+    .inline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      margin: 4px 0 6px;
+      color: #6b7280;
+    }
+
+    .inline a {
+      color: #ff3c68;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .inline a:hover {
+      text-decoration: underline;
+    }
+
+    .primary-btn {
+      margin-top: 4px;
+      width: 100%;
+      border-radius: 999px;
+      border: 0;
+      padding: 11px 16px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      color: #ffffff;
+      background: linear-gradient(135deg, #ff9a3c, #ff3c68);
+      box-shadow: 0 14px 30px rgba(255, 60, 104, 0.35);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 40px rgba(255, 60, 104, 0.45);
+    }
+
+    .primary-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 8px 20px rgba(255, 60, 104, 0.3);
+    }
+
+    .or {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 16px 0 8px;
+      font-size: 11px;
+      text-transform: uppercase;
+      color: #9ca3af;
+      letter-spacing: 0.12em;
+    }
+
+    .or::before,
+    .or::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: #e5e7eb;
+    }
+
+    .socials {
+      display: flex;
+      gap: 10px;
+    }
+
+    .social-btn {
+      flex: 1;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      padding: 8px 10px;
+      font-size: 13px;
+      cursor: pointer;
+      background: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      color: #374151;
+      transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+    }
+
+    .social-btn span.icon {
+      font-size: 15px;
+    }
+
+    .social-btn:hover {
+      background: #f9fafb;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+    }
+
+    .helper {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    /* ---------- Right: marketing panel ---------- */
+    .hero-panel {
+      position: relative;
+      padding: 34px 34px 40px;
+      background: radial-gradient(circle at top left, #fff1e6, #ffe2f0 55%, #fef2f2 80%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(255, 148, 94, 0.3);
+      font-size: 11px;
+      color: #f97316;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      align-self: flex-start;
+    }
+
+    .hero-pill span.dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.35);
+    }
+
+    .hero-main {
+      margin-top: 20px;
+      max-width: 260px;
+    }
+
+    .hero-main h2 {
+      font-size: 26px;
+      line-height: 1.2;
+      color: #111827;
+      margin-bottom: 10px;
+    }
+
+    .hero-main p {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .hero-metrics {
+      display: flex;
+      gap: 16px;
+      margin-top: 22px;
+      font-size: 11px;
+      color: #4b5563;
+    }
+
+    .metric {
+      padding: 8px 12px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 10px 30px rgba(248, 113, 113, 0.15);
+      min-width: 90px;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 16px;
+      color: #111827;
+    }
+
+    .hero-plates {
+      position: absolute;
+      right: -40px;
+      bottom: -20px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 10%, #ffffff, #fecaca 45%, #fb923c 90%);
+      box-shadow: 0 24px 80px rgba(248, 113, 113, 0.45);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .plate {
+      width: 64%;
+      height: 64%;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: inset 0 0 0 10px #fee2e2;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .plate::before,
+    .plate::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(0.5px);
+    }
+
+    .plate::before {
+      width: 120%;
+      height: 55%;
+      background: radial-gradient(circle at 30% 10%, #22c55e, #16a34a 35%, #fcd34d 80%);
+      top: 18%;
+      left: -10%;
+      transform: rotate(-10deg);
+    }
+
+    .plate::after {
+      width: 80%;
+      height: 40%;
+      background: radial-gradient(circle at 20% 30%, #f97316, #dc2626 55%, #b91c1c 90%);
+      bottom: 4%;
+      right: -6%;
+      transform: rotate(12deg);
+    }
+
+    .badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.11);
+      font-size: 11px;
+      color: #15803d;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: blur(6px);
+    }
+
+    .badge span.star {
+      color: #facc15;
+      font-size: 13px;
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 800px) {
+      .auth-wrapper {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+      }
+
+      .hero-panel {
+        display: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .auth-forms {
+        padding: 26px 22px 30px;
+      }
+
+      .hero-main h2 {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="auth-wrapper">
+    <!-- Left side: forms -->
+    <div class="auth-forms">
+      <div>
+        <div class="brand">FoodieDash</div>
+        <div class="tabs">
+          <button class="tab-btn active" data-target="#login">Sign in</button>
+          <button class="tab-btn" data-target="#signup">Create account</button>
+        </div>
+        <p class="subtitle">
+          Track orders in real time and reorder your favourites in one tap.
+        </p>
+      </div>
+
+      <!-- Login form -->
+      <form class="form active" id="login">
+        <div class="form-grid">
+          <div class="field">
+            <label for="login-email">Email</label>
+            <input id="login-email" type="email" placeholder="you@example.com" required />
+          </div>
+
+          <div class="field">
+            <label for="login-password">Password</label>
+            <input id="login-password" type="password" placeholder="••••••••" required />
+          </div>
+        </div>
+
+        <div class="inline">
+          <label>
+            <input type="checkbox" /> Keep me signed in
+          </label>
+          <a href="#">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="primary-btn">Sign in</button>
+
+        <div class="or">Or continue with</div>
+
+        <div class="socials">
+          <button type="button" class="social-btn">
+            <span class="icon">G</span>
+            Google
+          </button>
+          <button type="button" class="social-btn">
+            <span class="icon">📱</span>
+            Phone
+          </button>
+        </div>
+
+        <p class="helper">
+          New to FoodieDash?
+          <a href="#" id="go-signup">Create an account</a>
+        </p>
+      </form>
+
+      <!-- Signup form -->
+      <form class="form" id="signup">
+        <div class="form-grid">
+          <div class="field">
+            <label for="signup-name">Full name</label>
+            <input id="signup-name" type="text" placeholder="Ravi Kumar" required />
+          </div>
+
+          <div class="field">
+            <label for="signup-email">Email</label>
+            <input id="signup-email" type="email" placeholder="you@example.com" required />
+          </div>
+
+          <div class="field">
+            <label for="signup-phone">Phone</label>
+            <input id="signup-phone" type="tel" placeholder="+91 98765 43210" required />
+          </div>
+
+          <div class="field">
+            <label for="signup-address">Primary delivery area</label>
+            <select id="signup-address" required>
+              <option value="" disabled selected>Select your city/area</option>
+              <option>Bangalore • Whitefield</option>
+              <option>Bangalore • Electronic City</option>
+              <option>Hyderabad • Hitech City</option>
+              <option>Chennai • OMR</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="signup-password">Password</label>
+            <input id="signup-password" type="password" placeholder="Create a strong password" required />
+          </div>
+        </div>
+
+        <div class="inline">
+          <span>By continuing, you agree to our terms and privacy policy.</span>
+        </div>
+
+        <button type="submit" class="primary-btn">Create account</button>
+
+        <p class="helper">
+          Already have an account?
+          <a href="#" id="go-login">Sign in instead</a>
+        </p>
+      </form>
+    </div>
+
+    <!-- Right side: hero / marketing -->
+    <div class="hero-panel">
+      <div class="hero-pill">
+        <span class="dot"></span>
+        LIVE • Deliveries near you
+      </div>
+
+      <div class="hero-main">
+        <h2>Hot meals at your door in under 30 minutes.</h2>
+        <p>
+          Discover top-rated restaurants around you and get personalised
+          recommendations with smart reordering.
+        </p>
+
+        <div class="hero-metrics">
+          <div class="metric">
+            <strong>4.8★</strong>
+            Avg. customer rating
+          </div>
+          <div class="metric">
+            <strong>5k+</strong>
+            Orders delivered today
+          </div>
+        </div>
+      </div>
+
+      <div class="badge">
+        <span class="star">★</span>
+        Free delivery on first order
+      </div>
+
+      <div class="hero-plates">
+        <div class="plate"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab switch logic (no backend, just UI) -->
+  <script>
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    const forms = document.querySelectorAll(".form");
+    const goSignup = document.getElementById("go-signup");
+    const goLogin = document.getElementById("go-login");
+
+    function setActiveForm(targetId) {
+      forms.forEach((form) => {
+        form.classList.toggle("active", "#" + form.id === targetId);
+      });
+
+      tabButtons.forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.target === targetId);
+      });
+    }
+
+    tabButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        setActiveForm(btn.dataset.target);
+      });
+    });
+
+    if (goSignup) {
+      goSignup.addEventListener("click", (e) => {
+        e.preventDefault();
+        setActiveForm("#signup");
+      });
+    }
+
+    if (goLogin) {
+      goLogin.addEventListener("click", (e) => {
+        e.preventDefault();
+        setActiveForm("#login");
+      });
+    }
+  </script>
+</body>
+</html>
